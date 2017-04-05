@@ -1,9 +1,14 @@
 package com.example.testing.popularmovies;
 
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.view.ContextThemeWrapper;
+import android.support.v7.widget.AppCompatImageButton;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +24,9 @@ import com.squareup.picasso.Picasso;
  */
 
 public class MovieDetailFragment extends Fragment {
+
+    /* Get Data */
+    private DataManager dataManager;
 
     public static Fragment newInstance(Movie movie) {
 
@@ -36,7 +44,46 @@ public class MovieDetailFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.movie_detail,container,false);
         Movie movie = (Movie) getArguments().getParcelable("movie");
-        ImageView poster = (ImageView) view.findViewById(R.id.poster_detail);
+        ImageView poster = (ImageView) view.findViewById(R.id.movie_poster_detail);
+        AppCompatImageButton imageButton = (AppCompatImageButton)view.findViewById(R.id.fav_image_button_detail);
+
+        if (movie.isFavourite() == 1) {
+            final ContextThemeWrapper wrapper = new ContextThemeWrapper(getContext(), R.style.FavIconPressed);
+            final Drawable drawable = ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.favourite, wrapper.getTheme());
+            imageButton.setImageDrawable(drawable);
+            Log.d("DEBUG","Binding Fav");
+        }
+        else {
+            final ContextThemeWrapper wrapper = new ContextThemeWrapper(getContext(), R.style.FavIconNotPressed);
+            final Drawable drawable = ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.favourite, wrapper.getTheme());
+            imageButton.setImageDrawable(drawable);
+            Log.d("DEBUG","Binding Un Fav");
+        }
+
+        imageButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (movie.isFavourite() != 1) {
+
+                    final ContextThemeWrapper wrapper = new ContextThemeWrapper(getContext(), R.style.FavIconPressed);
+                    final Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.favourite, wrapper.getTheme());
+                    imageButton.setImageDrawable(drawable);
+                    movie.setFavourite(1);
+                    dataManager.saveMovieToDB(movie);
+
+                } else {
+
+                    final ContextThemeWrapper wrapper = new ContextThemeWrapper(getContext(), R.style.FavIconNotPressed);
+                    final Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.favourite, wrapper.getTheme());
+                    imageButton.setImageDrawable(drawable);
+                    movie.setFavourite(0);
+                    dataManager.deleteMovieFromDB(movie);
+
+                }
+
+            }
+        });
         final String BASE_URL = "http://image.tmdb.org/t/p/";
         final String IMAGE_SIZE = "w500";
         Uri posterPath = Uri.parse(BASE_URL).buildUpon().appendPath(IMAGE_SIZE).appendEncodedPath(movie.getPosterPath()).build();
@@ -57,5 +104,20 @@ public class MovieDetailFragment extends Fragment {
 
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
+        /* Initialize DataManager */
+        dataManager = new DataManager(getContext());
+        dataManager.openDbConnections();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        /* Close Data Manager */
+        // dataManager.closeDbConnections();
+    }
 }

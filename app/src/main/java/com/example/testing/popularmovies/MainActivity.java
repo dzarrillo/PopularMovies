@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        dataManager.closeDbConnections();
+        // dataManager.closeDbConnections();
         mSubscriptions.clear();
     }
 
