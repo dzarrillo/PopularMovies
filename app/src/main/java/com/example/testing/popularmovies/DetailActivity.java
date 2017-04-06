@@ -46,12 +46,14 @@ public class DetailActivity extends AppCompatActivity {
         Uri posterPath = Uri.parse(BASE_URL).buildUpon().appendPath(IMAGE_SIZE).appendEncodedPath(backgroundDrop).build();
         Picasso.with(getApplicationContext()).load(posterPath.toString()).into(backgroundPoster);
 
-        DetailFragment detailFragment =  (DetailFragment) DetailFragment.newInstance(movie);
+        if (savedInstanceState =    = null) {
+            // Restore last state for checked position.
+            DetailFragment detailFragment = (DetailFragment) DetailFragment.newInstance(movie);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.detail_fragment_container, detailFragment);
-        fragmentTransaction.commit();
-
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.add(R.id.detail_fragment_container, detailFragment);
+            fragmentTransaction.commit();
+        }
     }
 }
