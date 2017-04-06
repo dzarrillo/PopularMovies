@@ -42,7 +42,7 @@ public class MovieDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.movie_detail,container,false);
+        View view = inflater.inflate(R.layout.movie_detail_fragment,container,false);
         Movie movie = (Movie) getArguments().getParcelable("movie");
         ImageView poster = (ImageView) view.findViewById(R.id.movie_poster_detail);
         AppCompatImageButton imageButton = (AppCompatImageButton)view.findViewById(R.id.fav_image_button_detail);

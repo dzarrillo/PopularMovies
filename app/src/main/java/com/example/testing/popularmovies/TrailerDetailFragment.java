@@ -43,7 +43,7 @@ public class TrailerDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.trailer_detail,container,false);
+        View view = inflater.inflate(R.layout.trailer_detail_fragment,container,false);
         String movie_id = getArguments().getString("movie_id");
         RecyclerView trailerRecyclerView = (RecyclerView) view.findViewById(R.id.trailer_recycler_view);
         trailerRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

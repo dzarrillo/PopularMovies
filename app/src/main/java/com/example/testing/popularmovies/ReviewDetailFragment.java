@@ -42,7 +42,7 @@ public class ReviewDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.review_detail,container,false);
+        View view = inflater.inflate(R.layout.review_detail_fragment,container,false);
         String movie_id = getArguments().getString("movie_id");
         RecyclerView reviewRecyclerView = (RecyclerView) view.findViewById(R.id.review_recycler_view);
         reviewRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
