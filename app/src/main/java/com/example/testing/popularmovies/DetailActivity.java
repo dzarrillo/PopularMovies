@@ -46,7 +46,7 @@ public class DetailActivity extends AppCompatActivity {
         Uri posterPath = Uri.parse(BASE_URL).buildUpon().appendPath(IMAGE_SIZE).appendEncodedPath(backgroundDrop).build();
         Picasso.with(getApplicationContext()).load(posterPath.toString()).into(backgroundPoster);
 
-        if (savedInstanceState =    = null) {
+        if (savedInstanceState == null) {
             // Restore last state for checked position.
             DetailFragment detailFragment = (DetailFragment) DetailFragment.newInstance(movie);
 

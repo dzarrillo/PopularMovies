@@ -1,20 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context="com.example.testing.popularmovies.MainActivity">
+    android:layout_height="wrap_content" >
 
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar_spinner" />
-
-    <android.support.v7.widget.RecyclerView
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/movie_recycler_view">
-    </android.support.v7.widget.RecyclerView>
+        android:layout_height="wrap_content"
+        tools:context="com.example.testing.popularmovies.MainActivity">
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar_spinner" />
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/movie_recycler_view">
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/detail_fragment_container"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent" />
 
 </LinearLayout>

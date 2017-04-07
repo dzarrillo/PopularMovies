@@ -2,9 +2,12 @@ package com.example.testing.popularmovies;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
@@ -65,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         dataManager = new DataManager(getApplication());
 
         /* Initialize  RecyclerView*/
-        initializeRecycleView();
+        initializeRecycleView(savedInstanceState);
 
         /* Initialize Spinner */
         initializeSpinner();
@@ -73,6 +76,25 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void initializeDetailedFragment (Bundle savedInstanceState, Movie movie) {
+        /* Initialize Detailed Fragment, if it is in Landscape Mode */
+        if (getResources().getConfiguration().orientation
+                == Configuration.ORIENTATION_LANDSCAPE) {
+            if (savedInstanceState == null) {
+
+                if (mRecyclerViewAdapter.getItemCount() != 0)
+                {
+                    DetailFragment detailFragment = (DetailFragment) DetailFragment.newInstance(movie);
+
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.detail_fragment_container, detailFragment);
+                    fragmentTransaction.commit();
+                }
+
+            }
+        }
+    }
     @Override
     protected void onStart() {
         super.onStart();
@@ -99,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void initializeRecycleView() {
+    public void initializeRecycleView(Bundle savedInstanceState) {
 
         /* Initialize recycler view */
         mRecyclerView = (RecyclerView) findViewById(R.id.movie_recycler_view);
@@ -109,13 +131,24 @@ public class MainActivity extends AppCompatActivity {
                 movies,
                 (view, position) -> {
 
-                        /* Start detail activity */
-                    Intent detailActivity = new Intent();
-                    detailActivity.putExtra("movie", movies.get(position));
-                    detailActivity.setClass(getApplicationContext(), DetailActivity.class);
-                    startActivity(detailActivity);
+                    if (getResources().getConfiguration().orientation
+                            == Configuration.ORIENTATION_LANDSCAPE) {
 
-                },
+                        // However, if we're being restored from a previous state,
+                        // then we don't need to do anything and should return or else
+                        // we could end up with overlapping fragments.
+                        initializeDetailedFragment(savedInstanceState, movies.get(position));
+                    } else {
+
+                        /* Start detail activity */
+                        Intent detailActivity = new Intent();
+                        detailActivity.putExtra("movie", movies.get(position));
+                        detailActivity.setClass(getApplicationContext(), DetailActivity.class);
+                        startActivity(detailActivity);
+
+                    }
+
+                    },
                 (view, position) -> {
 
                     ImageButton button = (ImageButton) view;
